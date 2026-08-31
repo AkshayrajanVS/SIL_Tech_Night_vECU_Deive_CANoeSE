@@ -1,0 +1,20 @@
+name: SIL_Tech_Night_vECU_Derive_CANoeSE
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run vECU Derive Workflow
+        shell: powershell
+        run: |
+          powershell.exe -ExecutionPolicy Bypass -File "D:\vfs\vecu-derive_workflow_msrc_use_case_original.ps1"
