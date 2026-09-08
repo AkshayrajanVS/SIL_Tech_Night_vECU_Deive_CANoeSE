@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
   Build_Virtual_ECU:
     runs-on: self-hosted
 
@@ -18,3 +19,33 @@ jobs:
         shell: powershell
         run: |
           powershell.exe -ExecutionPolicy Bypass -File "D:\vfs\vecu-derive_workflow_msrc_use_case_original.ps1"
+
+  Generate_CANoeSE_Environment:
+    needs: Build_Virtual_ECU
+    runs-on: self-hosted
+
+    steps:
+      - name: Generate CANoe SE Environment
+        shell: powershell
+        run: |
+          powershell.exe -ExecutionPolicy Bypass -File "D:\vfs\new_features_vVIRTUALtarget_10\R34\MSR4_Product_DualTarget_Tc3xx_R34\internal\TC399_MC_MP\CANoe\run_Generate_CANoeSE_Env.ps1"
+
+  Compile_Test_Cases:
+    needs: Generate_CANoeSE_Environment
+    runs-on: self-hosted
+
+    steps:
+      - name: Compile Test Cases
+        shell: powershell
+        run: |
+          powershell.exe -ExecutionPolicy Bypass -File "D:\vfs\new_features_vVIRTUALtarget_10\R34\MSR4_Product_DualTarget_Tc3xx_R34\internal\TC399_MC_MP\CANoe\run_Compile_Test_Cases.ps1"
+
+  Execute_CANoeSE_Tests:
+    needs: Compile_Test_Cases
+    runs-on: self-hosted
+
+    steps:
+      - name: Execute CANoe SE Tests
+        shell: powershell
+        run: |
+          powershell.exe -ExecutionPolicy Bypass -File "D:\vfs\new_features_vVIRTUALtarget_10\R34\MSR4_Product_DualTarget_Tc3xx_R34\internal\TC399_MC_MP\CANoe\run_Execute_CANoeSE_Test.ps1"
